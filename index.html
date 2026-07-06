@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumo — AI-assisted studio for practical business systems</title>
+  <meta name="description" content="Lumo 是 AI 協作工作室，替小型公司與在地商家打造可信任官網、自動化流程與可快速驗證的 MVP。">
+  <style>
+    :root {
+      color-scheme: dark light;
+      --bg:#090909; --ink:#f4f0e8; --muted:#aaa49a; --quiet:#746f67;
+      --card:#121212; --card2:#191816; --line:#2d2a26; --accent:#e8d6b4; --accent-ink:#15110b;
+      --soft:#211f1c; --shadow:rgba(0,0,0,.5);
+    }
+    [data-theme="light"] {
+      --bg:#f4efe6; --ink:#111; --muted:#5e594f; --quiet:#888174;
+      --card:#fffaf1; --card2:#eee5d7; --line:#ddd2c2; --accent:#14110d; --accent-ink:#fff7e8;
+      --soft:#e8ddcd; --shadow:rgba(30,20,10,.12);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 30rem),
+        radial-gradient(circle at 82% 12%, var(--soft), transparent 34rem),
+        var(--bg);
+      color:var(--ink);
+      font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height:1.65;
+    }
+    a { color:inherit; }
+    .wrap { width:min(1160px, calc(100% - 32px)); margin:auto; }
+    nav {
+      position:sticky; top:0; z-index:2;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:18px 0;
+      backdrop-filter:blur(18px);
+    }
+    .brand { display:flex; align-items:center; gap:10px; font-size:22px; font-weight:850; letter-spacing:-.04em; }
+    .mark { width:28px; height:28px; border:1px solid var(--line); border-radius:50%; background:linear-gradient(135deg, var(--accent), transparent 70%); }
+    .nav-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    button, .button {
+      min-height:44px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:color-mix(in srgb, var(--card) 88%, transparent);
+      color:var(--ink);
+      cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      font:inherit; font-weight:750;
+      padding:10px 16px;
+      text-decoration:none;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    button:hover, .button:hover { transform:translateY(-1px); border-color:var(--accent); }
+    button:focus-visible, .button:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+    .primary { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+    header {
+      display:grid;
+      grid-template-columns:minmax(0, 1.08fr) minmax(320px, .92fr);
+      gap:38px;
+      align-items:end;
+      min-height:76vh;
+      padding:72px 0 56px;
+    }
+    .eyebrow, .label {
+      color:var(--quiet);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    h1, h2, h3, p { margin:0; }
+    h1 {
+      max-width:900px;
+      margin-top:16px;
+      font-size:clamp(46px, 7.4vw, 96px);
+      line-height:1.03;
+      letter-spacing:-.035em;
+    }
+    h2 {
+      font-size:clamp(34px, 5vw, 64px);
+      line-height:1.05;
+      letter-spacing:-.035em;
+    }
+    h3 { font-size:24px; line-height:1.15; letter-spacing:-.025em; }
+    p { color:var(--muted); font-size:18px; }
+    .lead { max-width:740px; margin-top:22px; font-size:clamp(19px, 2vw, 24px); }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; }
+    .panel, .card, .strip {
+      background:linear-gradient(180deg, color-mix(in srgb, var(--card) 96%, transparent), color-mix(in srgb, var(--card2) 92%, transparent));
+      border:1px solid var(--line);
+      box-shadow:0 24px 80px var(--shadow);
+    }
+    .panel { border-radius:34px; padding:26px; }
+    .panel-head { display:flex; justify-content:space-between; gap:16px; margin-bottom:54px; }
+    .statement { font-size:clamp(28px, 4vw, 48px); line-height:1.05; letter-spacing:-.04em; }
+    .rule { height:1px; background:var(--line); margin:28px 0; }
+    .mini-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+    .mini { border:1px solid var(--line); border-radius:18px; padding:14px; }
+    .mini strong { display:block; margin-bottom:6px; }
+    .mini span { color:var(--muted); font-size:14px; }
+    section { padding:66px 0; }
+    .section-head { display:grid; grid-template-columns:minmax(0, .9fr) minmax(280px, .55fr); gap:28px; align-items:end; margin-bottom:22px; }
+    .grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+    .card { border-radius:28px; min-height:260px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; }
+    .card .label { margin-bottom:28px; }
+    .card p { margin-top:14px; font-size:17px; }
+    .strip {
+      border-radius:30px;
+      padding:26px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:28px;
+      align-items:center;
+    }
+    .principles { display:grid; gap:12px; padding:0; margin:0; list-style:none; }
+    .principles li {
+      display:grid; grid-template-columns:110px 1fr; gap:18px;
+      padding:18px 0;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+    }
+    .principles strong { color:var(--ink); }
+    footer { border-top:1px solid var(--line); padding:26px 0 44px; color:var(--quiet); font-size:14px; }
+    [data-lang="zh"] [lang="en"], [data-lang="en"] [lang="zh"] { display:none; }
+    @media (max-width:860px) {
+      header, .section-head, .grid, .strip { grid-template-columns:1fr; }
+      header { min-height:auto; padding-top:42px; }
+      .mini-grid { grid-template-columns:1fr; }
+      .principles li { grid-template-columns:1fr; gap:6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { transition:none !important; }
+      button:hover, .button:hover { transform:none; }
+    }
+  </style>
+</head>
+<body data-lang="zh">
+  <nav class="wrap" aria-label="Site controls">
+    <div class="brand"><span class="mark" aria-hidden="true"></span><span>Lumo</span></div>
+    <div class="nav-actions">
+      <button type="button" id="themeToggle" aria-label="切換黑白主題">白色</button>
+      <button type="button" id="langToggle" aria-label="Switch language">English</button>
+    </div>
+  </nav>
+
+  <header class="wrap">
+    <div>
+      <div class="eyebrow">AI-assisted company studio</div>
+      <h1>
+        <span lang="zh">把 AI 變成可以交付的生意系統。</span>
+        <span lang="en">Turning AI into business systems that actually ship.</span>
+      </h1>
+      <p class="lead">
+        <span lang="zh">Lumo 是一家 AI 協作工作室。我們替小型公司、在地商家與獨立創業者打造可信任官網、自動化流程、快速 MVP 與營收實驗。</span>
+        <span lang="en">Lumo is an AI-assisted studio for small companies, local businesses, and solo founders. We build trust websites, automation workflows, fast MVPs, and revenue experiments.</span>
+      </p>
+      <div class="actions">
+        <a class="button primary" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry">
+          <span lang="zh">和 Lumo 討論需求</span>
+          <span lang="en">Discuss a project</span>
+        </a>
+        <a class="button" href="#services">
+          <span lang="zh">看服務</span>
+          <span lang="en">View services</span>
+        </a>
+      </div>
+    </div>
+
+    <aside class="panel" aria-label="Company position">
+      <div class="panel-head">
+        <span class="label">Company, not product</span>
+        <span class="label">2026</span>
+      </div>
+      <div class="statement">
+        <span lang="zh">少一點口號，多一點能上線、能驗證、能交付的東西。</span>
+        <span lang="en">Less theatre. More things that launch, validate, and deliver.</span>
+      </div>
+      <div class="rule"></div>
+      <div class="mini-grid">
+        <div class="mini"><strong>Web</strong><span lang="zh">可信任官網</span><span lang="en">Trust sites</span></div>
+        <div class="mini"><strong>AI</strong><span lang="zh">流程自動化</span><span lang="en">Automation</span></div>
+        <div class="mini"><strong>MVP</strong><span lang="zh">營收實驗</span><span lang="en">Revenue tests</span></div>
+      </div>
+    </aside>
+  </header>
+
+  <main class="wrap">
+    <section id="services">
+      <div class="section-head">
+        <h2><span lang="zh">Lumo 底下會有很多服務。</span><span lang="en">Lumo can hold many services.</span></h2>
+        <p><span lang="zh">官網只是第一條產品化服務。之後可以擴到 AI 秘書、自動化顧問、MVP 建置、數位代言人與其它營收實驗。</span><span lang="en">Websites are only the first productized service. Lumo can expand into AI assistants, automation consulting, MVP builds, digital spokespeople, and other revenue experiments.</span></p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <div class="label">01 / Local Web</div>
+            <h3><span lang="zh">在地商家可信官網</span><span lang="en">Trust websites for local businesses</span></h3>
+            <p><span lang="zh">替餐廳、工作室、接案服務商做手機友善、低維護、可信任的官方網站與私人預覽。</span><span lang="en">Mobile-first, low-maintenance websites and private previews for restaurants, studios, and service businesses.</span></p>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <div class="label">02 / AI Operations</div>
+            <h3><span lang="zh">AI 流程與營運自動化</span><span lang="en">AI workflow and operations automation</span></h3>
+            <p><span lang="zh">把重複工作整理成 SOP、Agent、檢查清單與可追蹤的交付流程。</span><span lang="en">Turn repetitive work into SOPs, agents, checklists, and trackable delivery flows.</span></p>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <div class="label">03 / MVP Lab</div>
+            <h3><span lang="zh">快速 MVP 與變現實驗</span><span lang="en">Fast MVPs and revenue experiments</span></h3>
+            <p><span lang="zh">從成功案例拆解，到做出可以展示、測試、收集回饋的最小版本。</span><span lang="en">From case breakdowns to small versions that can be shown, tested, and improved.</span></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="strip">
+        <div>
+          <div class="label">Current first offer</div>
+          <h2><span lang="zh">30 天私人預覽，是官網服務的驗證方式。</span><span lang="en">The 30-day private preview is a validation method.</span></h2>
+        </div>
+        <p>
+          <span lang="zh">它不是 Lumo 這家公司本身。它只是我們目前最快能交付、最快能驗證需求的一條服務線：先做不公開收錄的預覽頁，客戶覺得有價值，再公開與交付。</span>
+          <span lang="en">It is not the company itself. It is the fastest service line we can ship and validate: build a noindex preview first, then launch and hand off only if the client sees value.</span>
+        </p>
+      </div>
+    </section>
+
+    <section id="principles">
+      <div class="section-head">
+        <h2><span lang="zh">我們的工作方式。</span><span lang="en">How we work.</span></h2>
+        <p><span lang="zh">不先堆功能。先找最短路徑，做出能讓人判斷價值的版本。</span><span lang="en">No feature pileups. We find the shortest path to something people can judge.</span></p>
+      </div>
+      <ul class="principles">
+        <li><strong><span lang="zh">先驗證</span><span lang="en">Validate first</span></strong><span lang="zh">先做能看、能問、能收回饋的東西。</span><span lang="en">Build something that can be seen, asked about, and improved.</span></li>
+        <li><strong><span lang="zh">少維護</span><span lang="en">Low maintenance</span></strong><span lang="zh">能用一頁、一份清單、一個簡單流程解決，就不做大型系統。</span><span lang="en">If one page, one checklist, or one workflow works, we do not build a platform.</span></li>
+        <li><strong><span lang="zh">人類把關</span><span lang="en">Human approval</span></strong><span lang="zh">對外聯絡、公開上線、付款、合約與承諾，都需要人類確認。</span><span lang="en">Outreach, public launch, payment, contracts, and commitments need human approval.</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="strip">
+        <div>
+          <div class="label">Contact</div>
+          <h2><span lang="zh">如果你有一個想變現的想法，我們可以先拆小。</span><span lang="en">If you have an idea to monetize, we can make it smaller first.</span></h2>
+        </div>
+        <a class="button primary" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry">
+          <span lang="zh">hugo.uno.claw@gmail.com</span>
+          <span lang="en">Email Lumo</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <span lang="zh">Lumo 官方網站 v0 · AI 協作工作室 · 公司品牌，不是單一產品。</span>
+    <span lang="en">Lumo official website v0 · AI-assisted studio · Company brand, not a single product.</span>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const body = document.body;
+    const themeButton = document.querySelector("#themeToggle");
+    const langButton = document.querySelector("#langToggle");
+    const themeKey = "lumo-theme-v2";
+    const langKey = "lumo-lang-v2";
+
+    function setTheme(theme) {
+      root.dataset.theme = theme;
+      themeButton.textContent = theme === "dark" ? "白色" : "黑色";
+      localStorage.setItem(themeKey, theme);
+    }
+    function setLang(lang) {
+      body.dataset.lang = lang;
+      root.lang = lang === "zh" ? "zh-Hant" : "en";
+      langButton.textContent = lang === "zh" ? "English" : "中文";
+      localStorage.setItem(langKey, lang);
+    }
+    themeButton.addEventListener("click", () => setTheme(root.dataset.theme === "dark" ? "light" : "dark"));
+    langButton.addEventListener("click", () => setLang(body.dataset.lang === "zh" ? "en" : "zh"));
+    setTheme(localStorage.getItem(themeKey) || "dark");
+    setLang(localStorage.getItem(langKey) || "zh");
+  </script>
+</body>
+</html>
