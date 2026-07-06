@@ -7,329 +7,473 @@
   <meta name="description" content="Lumo 是 AI 協作工作室，替小型公司與在地商家打造可信官網、AI 自動化與可驗證的營收系統。">
   <style>
     :root {
-      color-scheme: light;
-      --bg:#f7f4ef;
-      --ink:#12110f;
-      --muted:#69635a;
-      --line:#d8d0c4;
-      --panel:#fffdfa;
-      --soft:#ece4d8;
-      --blue:#165dff;
-      --green:#137a4d;
-      --amber:#c17419;
-      --coral:#d94d35;
-      --shadow:0 26px 70px rgba(33, 27, 20, .12);
+      color-scheme: dark;
+      --bg:#111;
+      --ink:#f6f4f2;
+      --muted:#aaa39a;
+      --quiet:#706b64;
+      --line:#2b2a27;
+      --panel:#171716;
+      --panel2:#20201d;
+      --soft:#ebe7de;
+      --green:#13d6a4;
+      --blue:#5578ff;
+      --orange:#e58628;
+      --shadow:0 28px 90px rgba(0,0,0,.45);
     }
     * { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body {
       margin:0;
-      background:var(--bg);
+      background:
+        radial-gradient(circle at 70% 10%, rgba(19,214,164,.12), transparent 30rem),
+        radial-gradient(circle at 25% 38%, rgba(85,120,255,.09), transparent 34rem),
+        var(--bg);
       color:var(--ink);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family:Satoshi, "Avenir Next", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height:1.5;
+      overflow-x:hidden;
     }
     body::before {
       content:"";
       position:fixed;
-      inset:0;
+      inset:-25%;
+      z-index:-1;
       pointer-events:none;
       background:
-        linear-gradient(rgba(18, 17, 15, .035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(18, 17, 15, .035) 1px, transparent 1px);
-      background-size:42px 42px;
-      mask-image:linear-gradient(to bottom, #000, transparent 72%);
+        radial-gradient(circle at 18% 12%, rgba(246,244,242,.08), transparent 24rem),
+        radial-gradient(circle at 86% 30%, rgba(19,214,164,.12), transparent 28rem),
+        radial-gradient(circle at 52% 82%, rgba(229,134,40,.08), transparent 30rem);
+      filter:blur(30px);
+      opacity:.65;
+      animation:bgDrift 18s ease-in-out infinite alternate;
+    }
+    body[data-lang="zh"] [lang="en"], body[data-lang="en"] [lang="zh"] { display:none; }
+    body[data-lang="zh"] {
+      font-family:"PingFang TC", "Noto Sans TC", "Microsoft JhengHei UI", "Microsoft JhengHei", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     a { color:inherit; text-decoration:none; }
-    .wrap { width:min(1180px, calc(100% - 32px)); margin:auto; }
-    .topline {
-      border-bottom:1px solid var(--line);
-      overflow:hidden;
-      background:#14120f;
-      color:#f9f3ea;
-      font-size:13px;
-      font-weight:750;
-      white-space:nowrap;
-    }
-    .marquee {
-      display:flex;
-      width:max-content;
-      animation:slide 24s linear infinite;
-    }
-    .marquee span { padding:9px 22px; }
-    @keyframes slide { to { transform:translateX(-50%); } }
+    .wrap { width:min(1220px, calc(100% - 36px)); margin:auto; }
     nav {
       position:sticky;
       top:0;
-      z-index:3;
+      z-index:10;
       backdrop-filter:blur(18px);
-      background:color-mix(in srgb, var(--bg) 84%, transparent);
-      border-bottom:1px solid color-mix(in srgb, var(--line) 72%, transparent);
+      background:rgba(17,17,17,.78);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
     .nav-inner {
-      min-height:70px;
+      min-height:82px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:18px;
+      gap:20px;
     }
-    .brand { display:flex; align-items:center; gap:10px; font-size:23px; font-weight:950; letter-spacing:0; }
-    .mark {
-      width:30px;
-      aspect-ratio:1;
-      display:grid;
-      place-items:center;
-      border-radius:8px;
-      background:var(--ink);
-      color:var(--bg);
+    .logo {
+      font-size:31px;
       font-weight:950;
+      letter-spacing:-.04em;
+      line-height:1;
     }
-    .links { display:flex; align-items:center; gap:18px; color:var(--muted); font-size:14px; font-weight:800; }
-    .button {
-      min-height:44px;
+    .nav-links { display:flex; align-items:center; gap:22px; color:var(--muted); font-size:14px; font-weight:850; }
+    .button, .lang-toggle {
+      min-height:42px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      padding:11px 16px;
-      border:1px solid var(--ink);
-      border-radius:8px;
-      background:var(--ink);
-      color:#fffdfa;
-      font-weight:900;
-      box-shadow:none;
+      border-radius:999px;
+      border:1px solid var(--line);
+      font:inherit;
+      font-weight:950;
+      cursor:pointer;
+      transition:transform .2s ease, border-color .2s ease, background .2s ease;
     }
-    .button.secondary { background:transparent; color:var(--ink); border-color:var(--line); }
-    .button:focus-visible, a:focus-visible { outline:3px solid var(--blue); outline-offset:3px; }
+    .button {
+      padding:10px 18px;
+      background:var(--soft);
+      color:#10100f;
+    }
+    .button.ghost { background:#1b1b19; color:var(--ink); }
+    .lang-toggle { min-width:46px; padding:8px 11px; background:#141413; color:var(--ink); }
+    .button:hover, .lang-toggle:hover { transform:translateY(-2px); border-color:#5a5750; }
+    .button:focus-visible, .lang-toggle:focus-visible, a:focus-visible { outline:3px solid var(--blue); outline-offset:3px; }
     .hero {
-      min-height:calc(100vh - 106px);
+      min-height:calc(100vh - 82px);
       display:grid;
-      grid-template-columns:minmax(0, 1.05fr) minmax(320px, .95fr);
-      gap:42px;
+      grid-template-columns:minmax(0, .92fr) minmax(420px, 1.08fr);
       align-items:center;
-      padding:70px 0 52px;
+      gap:56px;
+      padding:92px 0 72px;
     }
     .eyebrow, .kicker {
-      color:var(--muted);
+      color:var(--quiet);
       font-size:12px;
       font-weight:950;
-      letter-spacing:.12em;
+      letter-spacing:.14em;
       text-transform:uppercase;
     }
     h1, h2, h3, p { margin:0; }
     h1 {
-      max-width:860px;
-      margin-top:16px;
-      font-size:clamp(52px, 8vw, 104px);
+      max-width:760px;
+      margin-top:18px;
+      font-size:clamp(58px, 8.8vw, 124px);
       line-height:.94;
-      letter-spacing:0;
+      letter-spacing:-.035em;
     }
     h2 {
-      font-size:clamp(36px, 5vw, 70px);
-      line-height:1;
-      letter-spacing:0;
+      font-size:clamp(44px, 6.4vw, 92px);
+      line-height:.96;
+      letter-spacing:-.035em;
     }
-    h3 { font-size:26px; line-height:1.08; letter-spacing:0; }
+    h3 { font-size:clamp(28px, 3vw, 44px); line-height:1.02; letter-spacing:-.025em; }
     p { color:var(--muted); font-size:18px; }
-    .lead { max-width:660px; margin-top:22px; font-size:clamp(19px, 2vw, 23px); }
-    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:30px; }
-    .proof { display:flex; gap:10px; flex-wrap:wrap; margin-top:28px; }
-    .pill {
+    body[data-lang="zh"] h1 {
+      font-size:clamp(40px, 6.4vw, 82px);
+      line-height:1.08;
+      letter-spacing:0;
+      font-weight:700;
+      text-wrap:balance;
+    }
+    body[data-lang="zh"] h2 {
+      font-size:clamp(34px, 4.8vw, 64px);
+      line-height:1.1;
+      letter-spacing:0;
+      font-weight:700;
+      text-wrap:balance;
+    }
+    body[data-lang="zh"] h3 {
+      font-size:clamp(25px, 2.7vw, 38px);
+      line-height:1.18;
+      letter-spacing:0;
+      font-weight:700;
+      text-wrap:balance;
+    }
+    body[data-lang="zh"] p {
+      line-height:1.7;
+    }
+    .lead { max-width:610px; margin-top:26px; font-size:clamp(19px, 1.9vw, 23px); }
+    body[data-lang="zh"] .lead {
+      font-size:clamp(18px, 1.65vw, 21px);
+      line-height:1.72;
+    }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:34px; }
+    .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+    .badge {
       border:1px solid var(--line);
       border-radius:999px;
-      padding:7px 11px;
-      background:rgba(255,255,255,.55);
+      padding:8px 11px;
+      background:rgba(255,255,255,.035);
       color:var(--muted);
       font-size:13px;
       font-weight:850;
     }
-    .stage {
+    .showcase {
       position:relative;
-      min-height:520px;
+      min-height:620px;
+      border-radius:34px;
+      overflow:hidden;
+    }
+    .showcase::before {
+      content:"";
+      position:absolute;
+      inset:60px 0 0 60px;
+      border-radius:34px;
+      background:linear-gradient(145deg, rgba(19,214,164,.22), rgba(85,120,255,.08) 45%, rgba(229,134,40,.12));
+      filter:blur(6px);
+      animation:pulsePane 8s ease-in-out infinite alternate;
+    }
+    .work-surface {
+      position:absolute;
+      inset:70px 28px 34px 0;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto auto;
+      gap:22px;
+      align-content:center;
       border:1px solid var(--line);
-      border-radius:8px;
-      background:var(--panel);
+      border-radius:28px;
+      background:#0d0d0c;
+      padding:28px;
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .stage::before {
+    .work-surface::after {
       content:"";
       position:absolute;
       inset:0;
-      background:
-        linear-gradient(135deg, rgba(22,93,255,.16), transparent 34%),
-        linear-gradient(315deg, rgba(19,122,77,.18), transparent 40%);
+      background:linear-gradient(90deg, rgba(255,255,255,.045), transparent 34%, rgba(19,214,164,.08));
     }
-    .screen {
-      position:absolute;
-      inset:28px 28px auto;
-      min-height:220px;
-      border:1px solid var(--line);
-      border-radius:8px;
-      background:#111;
-      color:#fffdfa;
+    .artifact {
+      position:relative;
+      z-index:1;
+      width:auto;
+      border:1px solid #302f2b;
+      border-radius:18px;
+      background:#141413;
       padding:18px;
-      box-shadow:0 18px 48px rgba(0,0,0,.22);
+      box-shadow:0 24px 70px rgba(0,0,0,.4);
+      animation:floatCard 7s ease-in-out infinite;
     }
-    .screen-top { display:flex; gap:7px; margin-bottom:34px; }
-    .dot { width:9px; aspect-ratio:1; border-radius:50%; background:#f15d44; }
-    .dot:nth-child(2) { background:#f2b441; }
-    .dot:nth-child(3) { background:#48b977; }
-    .screen strong { display:block; max-width:360px; font-size:34px; line-height:1; }
-    .screen p { margin-top:14px; color:#beb8ad; font-size:15px; }
-    .metric {
-      position:absolute;
-      display:grid;
-      gap:8px;
-      width:190px;
-      padding:16px;
-      border:1px solid var(--line);
-      border-radius:8px;
-      background:#fffdfa;
-      box-shadow:0 18px 42px rgba(33, 27, 20, .12);
+    .artifact.one { grid-column:1; grid-row:1; }
+    .artifact.two { grid-column:2; grid-row:1; z-index:2; animation-delay:-2s; }
+    .artifact.three { grid-column:1 / -1; grid-row:2; width:min(560px, 100%); justify-self:center; z-index:3; animation-delay:-4s; }
+    .artifact small {
+      display:block;
+      color:var(--quiet);
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:22px;
     }
-    .metric b { font-size:30px; line-height:1; }
-    .metric span { color:var(--muted); font-size:13px; font-weight:800; }
-    .m1 { left:36px; bottom:42px; }
-    .m2 { right:34px; bottom:116px; }
-    .m3 { right:96px; bottom:30px; border-color:#111; }
-    section { padding:76px 0; }
-    .section-head {
+    .artifact strong { display:block; font-size:30px; line-height:1.02; letter-spacing:-.025em; }
+    body[data-lang="zh"] .artifact strong {
+      font-size:26px;
+      line-height:1.18;
+      letter-spacing:0;
+      font-weight:700;
+      text-wrap:balance;
+    }
+    .artifact p { margin-top:12px; font-size:15px; }
+    .artifact.two { background:var(--soft); color:#10100f; }
+    .artifact.two p { color:#5d574e; }
+    .artifact.three { background:#111b17; }
+    .meter {
       display:grid;
-      grid-template-columns:minmax(0, .95fr) minmax(280px, .55fr);
-      gap:30px;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+      margin-top:18px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:850;
+    }
+    .bar { height:8px; border-radius:999px; background:#2a2925; overflow:hidden; }
+    .bar span { display:block; width:72%; height:100%; border-radius:inherit; background:var(--green); }
+    section { padding:92px 0; }
+    .split-head {
+      display:grid;
+      grid-template-columns:minmax(0, 1.1fr) minmax(300px, .56fr);
+      gap:42px;
       align-items:end;
-      margin-bottom:24px;
+      margin-bottom:34px;
     }
-    .grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
-    .card {
-      min-height:300px;
-      padding:22px;
+    .belief {
+      min-height:430px;
+      display:grid;
+      grid-template-columns:minmax(0, .95fr) minmax(360px, .75fr);
       border:1px solid var(--line);
-      border-radius:8px;
-      background:var(--panel);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      box-shadow:0 16px 38px rgba(33, 27, 20, .06);
+      border-radius:28px;
+      background:#151514;
+      overflow:hidden;
     }
-    .card.tinted { background:var(--soft); }
-    .card p { margin-top:14px; font-size:17px; }
+    .belief-main { padding:34px; }
+    .belief-main h3 { max-width:760px; font-size:clamp(44px, 5.4vw, 82px); }
+    body[data-lang="zh"] .belief-main h3 {
+      font-size:clamp(32px, 4vw, 56px);
+      line-height:1.15;
+    }
+    .belief-main p { max-width:620px; margin-top:24px; }
+    .belief-list { display:grid; border-left:1px solid var(--line); }
+    .belief-row {
+      display:grid;
+      grid-template-columns:82px 1fr;
+      gap:18px;
+      align-items:center;
+      padding:28px;
+      border-top:1px solid var(--line);
+    }
+    .belief-row:first-child { border-top:0; }
+    .belief-row span { color:#8a857c; font-size:30px; font-weight:950; }
+    .belief-row strong { display:block; color:var(--ink); font-size:28px; line-height:1.05; }
+    body[data-lang="zh"] .belief-row strong {
+      font-size:22px;
+      line-height:1.25;
+    }
+    .belief-row p { margin-top:8px; color:#b7b0a6; font-size:16px; }
+    .rhythm {
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      border:1px solid var(--line);
+      border-radius:20px;
+      overflow:hidden;
+      background:#0d0d0c;
+    }
+    .rhythm div {
+      min-height:118px;
+      padding:20px;
+      border-left:1px solid var(--line);
+    }
+    .rhythm div:first-child { border-left:0; }
+    .rhythm span {
+      display:block;
+      color:var(--quiet);
+      font-size:12px;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
+    .rhythm strong { font-size:21px; line-height:1.1; }
+    .lanes {
+      display:grid;
+      border:1px solid var(--line);
+      border-radius:28px;
+      overflow:hidden;
+      background:#161614;
+    }
+    .lane {
+      display:grid;
+      grid-template-columns:100px minmax(0, .78fr) minmax(300px, 1fr);
+      gap:28px;
+      align-items:center;
+      padding:30px;
+      border-top:1px solid var(--line);
+    }
+    .lane:first-child { border-top:0; }
+    .lane span { color:var(--quiet); font-size:28px; font-weight:950; }
+    .lane strong { font-size:32px; line-height:1.05; }
+    body[data-lang="zh"] .lane strong {
+      font-size:25px;
+      line-height:1.2;
+    }
+    .packages {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    .package {
+      min-height:430px;
+      padding:30px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:var(--panel);
+      transition:transform .24s ease, border-color .24s ease;
+    }
+    .package:hover, .belief:hover, .lanes:hover, .cta:hover { transform:translateY(-4px); border-color:#4a4741; }
     .tag {
       width:max-content;
       max-width:100%;
+      display:inline-flex;
+      align-items:center;
       border-radius:999px;
-      padding:6px 10px;
-      color:#fff;
-      background:var(--blue);
+      padding:7px 11px;
+      background:var(--green);
+      color:#07100d;
       font-size:12px;
       font-weight:950;
+      margin-bottom:18px;
     }
-    .tag.green { background:var(--green); }
-    .tag.amber { background:var(--amber); }
-    .tag.coral { background:var(--coral); }
-    .work {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      border:1px solid var(--line);
-      border-radius:8px;
-      background:#111;
-      color:#fffdfa;
-      overflow:hidden;
+    .tag.orange { background:var(--orange); color:#120b04; }
+    .price { margin:28px 0 8px; font-size:44px; font-weight:950; line-height:1; letter-spacing:-.02em; }
+    body[data-lang="zh"] .price {
+      font-size:32px;
+      line-height:1.18;
+      letter-spacing:0;
+      font-weight:700;
     }
-    .work-copy { padding:32px; }
-    .work-copy p { color:#c7c0b7; margin-top:16px; }
-    .work-list { display:grid; border-left:1px solid rgba(255,255,255,.16); }
-    .work-row {
-      display:grid;
-      grid-template-columns:120px 1fr;
-      gap:18px;
-      padding:24px;
-      border-top:1px solid rgba(255,255,255,.16);
-    }
-    .work-row:first-child { border-top:0; }
-    .work-row span { color:#918b83; font-weight:850; }
-    .plans { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .plan {
-      padding:28px;
-      border:1px solid var(--line);
-      border-radius:8px;
-      background:var(--panel);
-    }
-    .price { margin:26px 0 8px; font-size:42px; line-height:1; font-weight:950; }
-    .plan ul { display:grid; gap:12px; padding:0; margin:26px 0 0; list-style:none; color:var(--muted); }
-    .plan li { padding-top:12px; border-top:1px solid var(--line); }
+    .package ul { display:grid; gap:13px; padding:0; margin:30px 0 0; list-style:none; color:var(--muted); }
+    .package li { padding-top:13px; border-top:1px solid var(--line); }
     .cta {
       display:grid;
       grid-template-columns:minmax(0, 1fr) auto;
-      gap:24px;
+      gap:28px;
       align-items:center;
-      padding:32px;
+      padding:34px;
       border:1px solid var(--line);
-      border-radius:8px;
-      background:var(--ink);
-      color:#fffdfa;
+      border-radius:28px;
+      background:#151514;
+      transition:transform .24s ease, border-color .24s ease;
     }
-    .cta p { color:#c7c0b7; margin-top:12px; }
+    .cta h2 { max-width:920px; }
+    .cta p { margin-top:18px; }
     footer {
-      padding:28px 0 46px;
-      color:var(--muted);
-      font-size:14px;
+      padding:28px 0 50px;
       border-top:1px solid var(--line);
+      color:var(--quiet);
+      font-size:14px;
     }
-    @media (max-width:880px) {
-      .links a:not(.button) { display:none; }
-      .hero, .section-head, .grid, .work, .plans, .cta { grid-template-columns:1fr; }
-      .hero { min-height:auto; padding-top:44px; }
-      .stage { min-height:460px; }
-      .screen strong { font-size:28px; }
-      .metric { width:160px; }
-      .m2 { right:20px; bottom:104px; }
-      .m3 { right:42px; }
-      .work-list { border-left:0; border-top:1px solid rgba(255,255,255,.16); }
-      .work-row { grid-template-columns:1fr; gap:6px; }
+    @media (max-width:920px) {
+      .nav-links a:not(.button) { display:none; }
+      .hero, .split-head, .belief, .packages, .cta { grid-template-columns:1fr; }
+      .hero { min-height:auto; padding-top:54px; }
+      .showcase { min-height:560px; }
+      .work-surface { inset:34px 0 20px; }
+      .belief-list { border-left:0; border-top:1px solid var(--line); }
+      .lane { grid-template-columns:1fr; gap:12px; }
+      .rhythm { grid-template-columns:1fr 1fr; }
+      .rhythm div:nth-child(odd) { border-left:0; }
+      .rhythm div:nth-child(n+3) { border-top:1px solid var(--line); }
       .cta .button { width:100%; }
     }
     @media (max-width:560px) {
-      .wrap { width:min(100% - 22px, 1180px); }
-      .topline { font-size:12px; }
-      .brand { font-size:20px; }
+      .wrap { width:min(100% - 22px, 1220px); }
+      .nav-inner { min-height:70px; }
+      .logo { font-size:24px; }
+      .nav-links { gap:8px; }
+      body[data-lang="zh"] h1 {
+        font-size:clamp(34px, 10.8vw, 42px);
+        line-height:1.12;
+      }
+      body[data-lang="zh"] h2 {
+        font-size:clamp(29px, 9vw, 36px);
+        line-height:1.14;
+      }
+      body[data-lang="zh"] .belief-main h3 {
+        font-size:clamp(28px, 8vw, 34px);
+      }
       .button { width:100%; }
-      .stage { min-height:420px; }
-      .screen { inset:18px 18px auto; }
-      .metric { width:142px; padding:13px; }
-      .metric b { font-size:25px; }
-      .m1 { left:18px; bottom:34px; }
-      .m2 { right:18px; bottom:104px; }
-      .m3 { right:54px; bottom:18px; }
+      .nav-links .button { width:auto; }
+      .showcase { min-height:760px; }
+      .work-surface {
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        gap:18px;
+        padding:18px;
+      }
+      .artifact { width:100%; padding:15px; }
+      .artifact strong { font-size:24px; }
+      body[data-lang="zh"] .artifact strong { font-size:23px; }
+      .artifact.one, .artifact.two, .artifact.three {
+        grid-column:auto;
+        grid-row:auto;
+        justify-self:auto;
+      }
+      .belief-main, .package, .cta { padding:24px; }
+      .belief-row { grid-template-columns:1fr; gap:8px; padding:24px; }
+      .rhythm { grid-template-columns:1fr; }
+      .rhythm div { border-left:0; border-top:1px solid var(--line); }
+      .rhythm div:first-child { border-top:0; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior:auto; }
-      .marquee { animation:none; }
+      *, *::before, *::after { animation:none !important; transition:none !important; }
+    }
+    @keyframes bgDrift {
+      from { transform:translate3d(-2%, -1%, 0) scale(1); }
+      to { transform:translate3d(2%, 1.5%, 0) scale(1.04); }
+    }
+    @keyframes pulsePane {
+      from { transform:translateY(0) scale(1); opacity:.75; }
+      to { transform:translateY(-14px) scale(1.04); opacity:1; }
+    }
+    @keyframes floatCard {
+      0%, 100% { transform:translateY(0); }
+      50% { transform:translateY(-12px); }
     }
   </style>
 </head>
-<body>
-  <div class="topline" aria-label="Lumo current work">
-    <div class="marquee">
-      <span>Currently building: local trust homepages</span>
-      <span>Next: AI operations for small teams</span>
-      <span>Now testing: 30-day private previews</span>
-      <span>Company, not a single product</span>
-      <span>Currently building: local trust homepages</span>
-      <span>Next: AI operations for small teams</span>
-      <span>Now testing: 30-day private previews</span>
-      <span>Company, not a single product</span>
-    </div>
-  </div>
-
+<body data-lang="zh">
   <nav>
     <div class="wrap nav-inner">
-      <a class="brand" href="#" aria-label="Lumo home"><span class="mark">L</span><span>Lumo</span></a>
-      <div class="links">
-        <a href="#work">方向</a>
-        <a href="#services">服務</a>
-        <a href="#contact" class="button">開始討論</a>
+      <a class="logo" href="#">lumo</a>
+      <div class="nav-links">
+        <a href="#method"><span lang="zh">方法</span><span lang="en">Method</span></a>
+        <a href="#services"><span lang="zh">服務</span><span lang="en">Services</span></a>
+        <button class="lang-toggle" type="button" id="langToggle" aria-label="Switch language">EN</button>
+        <a class="button" href="#contact"><span lang="zh">開始</span><span lang="en">Start</span></a>
       </div>
     </div>
   </nav>
@@ -337,106 +481,109 @@
   <header class="wrap hero">
     <div>
       <div class="eyebrow">AI studio for useful business systems</div>
-      <h1>把想法做成能賣的系統。</h1>
-      <p class="lead">Lumo 是 AI 協作工作室。先幫小型公司與在地商家做可信官網，再把能帶來營收的流程變成自動化、MVP 與可重複交付的服務。</p>
+      <h1><span lang="zh">把客戶能判斷的版本做出來。</span><span lang="en">Build the version customers can judge.</span></h1>
+      <p class="lead">
+        <span lang="zh">Lumo 替小型公司與在地商家做可信官網、私人預覽、AI 工作流與營收實驗。不是先堆功能，是先做能被看見、被回覆、被購買的版本。</span>
+        <span lang="en">Lumo builds trust websites, private previews, AI workflows, and revenue experiments for small companies and local businesses. Not feature piles. Versions people can see, answer, and buy.</span>
+      </p>
       <div class="actions">
-        <a class="button" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry">和 Lumo 討論需求</a>
-        <a class="button secondary" href="#services">看服務包</a>
+        <a class="button" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry"><span lang="zh">和 Lumo 討論</span><span lang="en">Talk to Lumo</span></a>
+        <a class="button ghost" href="#method"><span lang="zh">看方法</span><span lang="en">See method</span></a>
       </div>
-      <div class="proof">
-        <span class="pill">No bloated platform</span>
-        <span class="pill">Private preview first</span>
-        <span class="pill">Human approval before launch</span>
+      <div class="badges">
+        <span class="badge">Private preview first</span>
+        <span class="badge">Human approval</span>
+        <span class="badge">Revenue signal</span>
       </div>
     </div>
-
-    <div class="stage" aria-label="Lumo service preview">
-      <div class="screen">
-        <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <strong>Trust homepage, AI workflow, fast MVP.</strong>
-        <p>一個公司品牌，容納多條可驗證的服務線。</p>
+    <div class="showcase" aria-label="Lumo work preview">
+      <div class="work-surface">
+        <article class="artifact one">
+          <small>Preview / 01</small>
+          <strong><span lang="zh">一頁可信官網</span><span lang="en">One-page trust site</span></strong>
+          <p><span lang="zh">先讓客戶知道你可信、你做什麼、下一步去哪。</span><span lang="en">Make trust, offer, and next step obvious fast.</span></p>
+          <div class="meter"><div class="bar"><span></span></div><em>72%</em></div>
+        </article>
+        <article class="artifact two">
+          <small>Signal / 02</small>
+          <strong><span lang="zh">私人預覽，不先公開。</span><span lang="en">Private first. Public later.</span></strong>
+          <p><span lang="zh">有人同意、有回饋、有意願，再上線。</span><span lang="en">Launch only when there is consent, feedback, or intent.</span></p>
+        </article>
+        <article class="artifact three">
+          <small>System / 03</small>
+          <strong><span lang="zh">流程變成可重複交付。</span><span lang="en">Workflow becomes repeatable.</span></strong>
+          <p><span lang="zh">文案、檢查表、AI 協作與交付節奏放在同一套系統。</span><span lang="en">Copy, checks, AI support, and delivery rhythm in one system.</span></p>
+        </article>
       </div>
-      <div class="metric m1"><b>30d</b><span>私人預覽驗證週期</span></div>
-      <div class="metric m2"><b>3</b><span>目前主力服務方向</span></div>
-      <div class="metric m3"><b>1st</b><span>先追第一筆真收入</span></div>
     </div>
   </header>
 
   <main class="wrap">
-    <section id="work">
-      <div class="section-head">
-        <h2>市場動得很快，所以 Lumo 先做能上線的版本。</h2>
-        <p>不是先賣抽象顧問，也不是先做大平台。先做一個客戶看得懂、能判斷、能付錢的交付物。</p>
+    <section id="method">
+      <div class="split-head">
+        <h2><span lang="zh">網站不是作品集，是一次市場測試。</span><span lang="en">A website is not a portfolio. It is a market test.</span></h2>
+        <p><span lang="zh">AI 可以加速，但設計要有判斷。Lumo 的頁面要回答三件事：誰需要、為什麼現在、下一步怎麼開始。</span><span lang="en">AI can speed up production, but design needs judgment. A Lumo page answers: who needs this, why now, and how to start.</span></p>
       </div>
-      <div class="grid">
-        <article class="card">
-          <span class="tag">Brand clarity</span>
-          <div>
-            <h3>讓人一眼知道你可信、你做什麼、下一步去哪。</h3>
-            <p>適合缺官網、官網很舊、或只有社群頁的商家與服務商。</p>
-          </div>
-        </article>
-        <article class="card tinted">
-          <span class="tag green">AI-native delivery</span>
-          <div>
-            <h3>用 AI 加速，但交付的是清楚、乾淨、能維護的結果。</h3>
-            <p>不把 AI 當口號。AI 是縮短設計、文案、建置與修正週期的方法。</p>
-          </div>
-        </article>
-        <article class="card">
-          <span class="tag amber">Revenue first</span>
-          <div>
-            <h3>每次改版都服務一件事：更快拿到市場回饋。</h3>
-            <p>私下預覽、低風險提案、有人同意後再公開上線。</p>
-          </div>
-        </article>
+      <div class="belief">
+        <div class="belief-main">
+          <span class="tag">Lumo method</span>
+          <h3><span lang="zh">先做一個會被判斷的東西。</span><span lang="en">Build something people can judge.</span></h3>
+          <p><span lang="zh">我們把可信、速度、回饋壓進同一條交付節奏：少說 AI 魔法，多做能拿去問客戶的版本。</span><span lang="en">We compress trust, speed, and feedback into one delivery rhythm: less AI theatre, more versions you can put in front of customers.</span></p>
+        </div>
+        <div class="belief-list">
+          <div class="belief-row"><span>01</span><div><strong><span lang="zh">可信先行</span><span lang="en">Trust first</span></strong><p><span lang="zh">先讓人知道你是誰、幫誰、下一步去哪。</span><span lang="en">Say who you are, who you help, and where to go next.</span></p></div></div>
+          <div class="belief-row"><span>02</span><div><strong><span lang="zh">先給人看</span><span lang="en">Show it early</span></strong><p><span lang="zh">先做私人預覽，不先公開、不先假裝很大。</span><span lang="en">Make a private preview before public launch or big claims.</span></p></div></div>
+          <div class="belief-row"><span>03</span><div><strong><span lang="zh">回饋才擴大</span><span lang="en">Scale after signal</span></strong><p><span lang="zh">有人回覆、修正、付費，才做下一層。</span><span lang="en">Expand only after replies, edits, or payment intent.</span></p></div></div>
+        </div>
+      </div>
+      <div class="rhythm" aria-label="Lumo delivery rhythm">
+        <div><span>Frame</span><strong><span lang="zh">定義 offer</span><span lang="en">Define the offer</span></strong></div>
+        <div><span>Preview</span><strong><span lang="zh">做私人頁</span><span lang="en">Build the private page</span></strong></div>
+        <div><span>Signal</span><strong><span lang="zh">拿回饋</span><span lang="en">Collect signal</span></strong></div>
+        <div><span>Ship</span><strong><span lang="zh">同意後上線</span><span lang="en">Launch after approval</span></strong></div>
       </div>
     </section>
 
     <section>
-      <div class="work">
-        <div class="work-copy">
-          <div class="kicker">Operating thesis</div>
-          <h2>Lumo 是公司，不是單一產品。</h2>
-          <p>現在先從官網與商家信任頁切入，之後可以延伸到 AI 秘書、自動化流程、MVP 建置、內容代工與營收實驗。</p>
-        </div>
-        <div class="work-list">
-          <div class="work-row"><span>01</span><strong>Local Business / Contractor Trust Homepage Pack</strong></div>
-          <div class="work-row"><span>02</span><strong>30-Day Launch Page with permission-first preview</strong></div>
-          <div class="work-row"><span>03</span><strong>AI operations and workflow cleanup for small teams</strong></div>
-          <div class="work-row"><span>04</span><strong>Fast MVPs after a paid delivery proves demand</strong></div>
-        </div>
+      <div class="split-head">
+        <h2><span lang="zh">Lumo 是公司，不是單一產品。</span><span lang="en">Lumo is a company, not one product.</span></h2>
+        <p><span lang="zh">現在先從官網與商家信任頁切入，之後延伸到 AI 秘書、自動化流程、MVP 建置與營收實驗。</span><span lang="en">We start with trust pages and local websites, then expand into AI assistants, workflows, MVP builds, and revenue experiments.</span></p>
+      </div>
+      <div class="lanes">
+        <div class="lane"><span>01</span><strong><span lang="zh">在地商家可信官網</span><span lang="en">Local trust homepages</span></strong><p><span lang="zh">給缺官網、官網很舊、或只靠社群頁的商家。</span><span lang="en">For businesses with no site, an outdated site, or only social pages.</span></p></div>
+        <div class="lane"><span>02</span><strong><span lang="zh">30 天私人預覽頁</span><span lang="en">30-day private previews</span></strong><p><span lang="zh">先給對方看，不用一開始就承諾公開上線。</span><span lang="en">Show value before making a public launch commitment.</span></p></div>
+        <div class="lane"><span>03</span><strong><span lang="zh">AI 營運流程整理</span><span lang="en">AI workflow cleanup</span></strong><p><span lang="zh">把重複工作整理成 SOP、模板與可審核的 AI 協作。</span><span lang="en">Turn repeated work into SOPs, templates, and reviewable AI support.</span></p></div>
       </div>
     </section>
 
     <section id="services">
-      <div class="section-head">
-        <h2>先賣兩個清楚的入口。</h2>
-        <p>保留彈性，但首頁不要讓客戶猜。先用兩個服務包承接需求，其它東西之後再加。</p>
+      <div class="split-head">
+        <h2><span lang="zh">兩個入口，先拿真訊號。</span><span lang="en">Two entry points to get real signal.</span></h2>
+        <p><span lang="zh">保留彈性，但首頁不要讓客戶猜。先用兩個服務包承接需求，其它東西之後再加。</span><span lang="en">Keep flexibility behind the scenes, but do not make customers guess. Start with two service packages.</span></p>
       </div>
-      <div class="plans">
-        <article class="plan">
-          <span class="tag coral">First offer</span>
+      <div class="packages">
+        <article class="package">
+          <span class="tag orange">First offer</span>
           <h3>Trust Homepage Sprint</h3>
-          <div class="price">私下報價</div>
-          <p>替小型公司、在地商家、服務商做一頁式可信官網與私人預覽。</p>
+          <div class="price"><span lang="zh">私下報價</span><span lang="en">Quoted privately</span></div>
+          <p><span lang="zh">替小型公司、在地商家、服務商做一頁式可信官網與私人預覽。</span><span lang="en">A one-page trust website and private preview for small companies, local businesses, and service providers.</span></p>
           <ul>
-            <li>定位、首屏文案與 CTA</li>
-            <li>手機優先的一頁式官網</li>
-            <li>私人預覽，不先公開索引</li>
-            <li>客戶同意後再正式上線</li>
+            <li><span lang="zh">定位、首屏文案與 CTA</span><span lang="en">Positioning, hero copy, and CTA</span></li>
+            <li><span lang="zh">手機優先的一頁式官網</span><span lang="en">Mobile-first one-page website</span></li>
+            <li><span lang="zh">私人預覽，不先公開索引</span><span lang="en">Private preview before indexing</span></li>
+            <li><span lang="zh">客戶同意後再正式上線</span><span lang="en">Launch only after approval</span></li>
           </ul>
         </article>
-        <article class="plan">
-          <span class="tag green">Next offer</span>
+        <article class="package">
+          <span class="tag">Next offer</span>
           <h3>AI Workflow Sprint</h3>
-          <div class="price">診斷後估</div>
-          <p>把重複工作整理成可追蹤的流程、檢查清單與 AI 協作系統。</p>
+          <div class="price"><span lang="zh">診斷後估</span><span lang="en">Scoped after diagnosis</span></div>
+          <p><span lang="zh">把重複工作整理成可追蹤的流程、檢查清單與 AI 協作系統。</span><span lang="en">Turn repeated work into trackable workflows, checklists, and AI-assisted operating systems.</span></p>
           <ul>
-            <li>現有流程盤點</li>
-            <li>SOP、模板與交付檢查表</li>
-            <li>可人工審核的 AI 工作流</li>
-            <li>先小範圍驗證，再擴大</li>
+            <li><span lang="zh">現有流程盤點</span><span lang="en">Current workflow audit</span></li>
+            <li><span lang="zh">SOP、模板與交付檢查表</span><span lang="en">SOPs, templates, and delivery checks</span></li>
+            <li><span lang="zh">可人工審核的 AI 工作流</span><span lang="en">AI workflows with human review</span></li>
+            <li><span lang="zh">先小範圍驗證，再擴大</span><span lang="en">Validate small before expanding</span></li>
           </ul>
         </article>
       </div>
@@ -446,8 +593,8 @@
       <div class="cta">
         <div>
           <div class="kicker">Start small</div>
-          <h2>有想變現的服務或想改版的官網，先拆成一個可驗證版本。</h2>
-          <p>不需要先買大系統。先看需求、做預覽、拿回饋，再決定要不要上線。</p>
+          <h2><span lang="zh">有想變現的服務或想改版的官網，先拆成一個可驗證版本。</span><span lang="en">Have a service to monetize or a site to rebuild? Make the testable version first.</span></h2>
+          <p><span lang="zh">不需要先買大系統。先看需求、做預覽、拿回饋，再決定要不要上線。</span><span lang="en">No need to buy a big system first. Scope the need, make a preview, collect feedback, then decide whether to launch.</span></p>
         </div>
         <a class="button" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry">hugo.uno.claw@gmail.com</a>
       </div>
@@ -455,7 +602,24 @@
   </main>
 
   <footer class="wrap">
-    Lumo official site v1 · AI-assisted company studio · Built for practical revenue systems.
+    Lumo official site v2 draft · AI-assisted company studio · Local preview only.
   </footer>
+
+  <script>
+    const body = document.body;
+    const root = document.documentElement;
+    const langToggle = document.querySelector("#langToggle");
+    const langKey = "lumo-site-index2-lang";
+
+    function setLang(lang) {
+      body.dataset.lang = lang;
+      root.lang = lang === "zh" ? "zh-Hant" : "en";
+      langToggle.textContent = lang === "zh" ? "EN" : "ZH";
+      localStorage.setItem(langKey, lang);
+    }
+
+    langToggle.addEventListener("click", () => setLang(body.dataset.lang === "zh" ? "en" : "zh"));
+    setLang(localStorage.getItem(langKey) || "zh");
+  </script>
 </body>
 </html>
