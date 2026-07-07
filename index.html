@@ -375,9 +375,64 @@
     }
     .package ul { display:grid; gap:13px; padding:0; margin:30px 0 0; list-style:none; color:var(--muted); }
     .package li { padding-top:13px; border-top:1px solid var(--line); }
+    .proof-wall {
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+    }
+    .proof-shot {
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:#10100f;
+      padding:24px;
+    }
+    .proof-shot.alt { background:var(--soft); color:#111; }
+    .proof-shot .kicker { margin-bottom:18px; }
+    .mock-window {
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      overflow:hidden;
+      background:#171716;
+      box-shadow:0 22px 70px rgba(0,0,0,.35);
+    }
+    .proof-shot.alt .mock-window { background:#f7f2e8; border-color:#d9d0c4; box-shadow:none; }
+    .mock-bar { display:flex; gap:7px; padding:12px; border-bottom:1px solid var(--line); }
+    .mock-bar i { width:8px; height:8px; border-radius:50%; background:var(--quiet); }
+    .mock-page { padding:22px; display:grid; gap:14px; }
+    .mock-title { width:74%; height:26px; border-radius:999px; background:var(--ink); }
+    .proof-shot.alt .mock-title { background:#111; }
+    .mock-line { height:10px; border-radius:999px; background:#5d5851; opacity:.65; }
+    .mock-line.short { width:58%; }
+    .mock-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+    .mock-card { min-height:72px; border:1px solid var(--line); border-radius:14px; background:rgba(255,255,255,.04); }
+    .mock-cta { width:42%; height:28px; border-radius:999px; background:var(--green); }
+    .proof-copy { margin-top:18px; display:grid; gap:8px; }
+    .proof-copy strong { font-size:26px; line-height:1.1; }
+    .proof-copy p { font-size:15px; }
+    .faq {
+      display:grid;
+      gap:10px;
+    }
+    .faq details {
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#151514;
+      padding:18px 20px;
+    }
+    .faq summary {
+      cursor:pointer;
+      color:var(--ink);
+      font-weight:850;
+      list-style:none;
+    }
+    .faq summary::-webkit-details-marker { display:none; }
+    .faq p { margin-top:12px; font-size:16px; }
     .cta {
       display:grid;
-      grid-template-columns:minmax(0, 1fr) auto;
+      grid-template-columns:minmax(0, 1fr) minmax(320px, .52fr);
       gap:28px;
       align-items:center;
       padding:34px;
@@ -388,6 +443,19 @@
     }
     .cta h2 { max-width:920px; }
     .cta p { margin-top:18px; }
+    .contact-form { display:grid; gap:10px; }
+    .contact-form input, .contact-form textarea {
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#0f0f0e;
+      color:var(--ink);
+      font:inherit;
+      padding:13px 14px;
+    }
+    .contact-form textarea { min-height:104px; resize:vertical; }
+    .contact-form button { width:100%; }
+    .form-status { min-height:20px; color:var(--muted); font-size:13px; }
     footer {
       padding:28px 0 50px;
       border-top:1px solid var(--line);
@@ -396,7 +464,7 @@
     }
     @media (max-width:920px) {
       .nav-links a:not(.button) { display:none; }
-      .hero, .split-head, .belief, .packages, .cta { grid-template-columns:1fr; }
+      .hero, .split-head, .belief, .packages, .proof-wall, .cta { grid-template-columns:1fr; }
       .hero { min-height:auto; padding-top:54px; }
       .showcase { min-height:560px; }
       .work-surface { inset:34px 0 20px; }
@@ -442,6 +510,7 @@
         justify-self:auto;
       }
       .belief-main, .package, .cta { padding:24px; }
+      .proof-shot { padding:18px; }
       .belief-row { grid-template-columns:1fr; gap:8px; padding:24px; }
       .rhythm { grid-template-columns:1fr; }
       .rhythm div { border-left:0; border-top:1px solid var(--line); }
@@ -472,6 +541,7 @@
       <div class="nav-links">
         <a href="#method"><span lang="zh">方法</span><span lang="en">Method</span></a>
         <a href="#services"><span lang="zh">服務</span><span lang="en">Services</span></a>
+        <a href="#faq">FAQ</a>
         <button class="lang-toggle" type="button" id="langToggle" aria-label="Switch language">EN</button>
         <a class="button" href="#contact"><span lang="zh">開始</span><span lang="en">Start</span></a>
       </div>
@@ -587,6 +657,63 @@
           </ul>
         </article>
       </div>
+      <div class="proof-wall" aria-label="Concept previews">
+        <article class="proof-shot">
+          <div class="kicker">Trust homepage preview</div>
+          <div class="mock-window" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i></div>
+            <div class="mock-page">
+              <div class="mock-title"></div>
+              <div class="mock-line"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-cta"></div>
+              <div class="mock-grid"><div class="mock-card"></div><div class="mock-card"></div></div>
+            </div>
+          </div>
+          <div class="proof-copy">
+            <strong><span lang="zh">客戶先看到質感，再決定要不要公開。</span><span lang="en">Clients see the quality before going public.</span></strong>
+            <p><span lang="zh">這裡放私人預覽的局部概念稿；正式案例等有客戶同意後再上。</span><span lang="en">Private preview fragments live here. Real cases are added only after client approval.</span></p>
+          </div>
+        </article>
+        <article class="proof-shot alt">
+          <div class="kicker">Before / after direction</div>
+          <div class="mock-window" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i></div>
+            <div class="mock-page">
+              <div class="mock-title"></div>
+              <div class="mock-line"></div>
+              <div class="mock-line"></div>
+              <div class="mock-grid"><div class="mock-card"></div><div class="mock-card"></div></div>
+              <div class="mock-cta"></div>
+            </div>
+          </div>
+          <div class="proof-copy">
+            <strong><span lang="zh">不是炫技，是讓商家看起來值得信任。</span><span lang="en">Not flash. Just enough trust to act.</span></strong>
+            <p><span lang="zh">首頁先解決第一眼判斷：你是誰、可不可信、下一步去哪。</span><span lang="en">The homepage answers who, why trust, and next step.</span></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="split-head">
+        <h2><span lang="zh">先把疑慮說清楚。</span><span lang="en">Answer the doubts before the call.</span></h2>
+        <p><span lang="zh">小型商家不需要聽術語。要知道會不會公開、怎麼配合、之後要不要繼續付錢。</span><span lang="en">Small businesses need plain answers: public or private, how the work happens, and what happens after launch.</span></p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary><span lang="zh">什麼是私人預覽？會被 Google 找到嗎？</span><span lang="en">What is a private preview? Can Google find it?</span></summary>
+          <p><span lang="zh">先做一個不主動公開、不放正式入口的預覽頁，讓你確認內容與方向。正式公開與索引，等你同意後再做。</span><span lang="en">It is a review page that is not promoted as the official site. Public launch and indexing happen only after approval.</span></p>
+        </details>
+        <details>
+          <summary><span lang="zh">我不懂 AI，也可以做嗎？</span><span lang="en">Can we do this if I do not understand AI?</span></summary>
+          <p><span lang="zh">可以。Lumo 交付的是你看得懂、能維護、能拿去判斷的頁面或流程；AI 是我們加速的方法，不是叫你學工具。</span><span lang="en">Yes. Lumo delivers pages and workflows you can understand and judge. AI speeds up the work; it is not homework for you.</span></p>
+        </details>
+        <details>
+          <summary><span lang="zh">上線後一定要付維護費嗎？</span><span lang="en">Is there a required maintenance fee?</span></summary>
+          <p><span lang="zh">不用一開始綁長約。先把第一版做出來；如果之後需要修改、追蹤或自動化，再另外談。</span><span lang="en">No long retainer upfront. Build the first version first; updates, tracking, or automation can be scoped later.</span></p>
+        </details>
+      </div>
     </section>
 
     <section id="contact">
@@ -596,7 +723,14 @@
           <h2><span lang="zh">有想變現的服務或想改版的官網，先拆成一個可驗證版本。</span><span lang="en">Have a service to monetize or a site to rebuild? Make the testable version first.</span></h2>
           <p><span lang="zh">不需要先買大系統。先看需求、做預覽、拿回饋，再決定要不要上線。</span><span lang="en">No need to buy a big system first. Scope the need, make a preview, collect feedback, then decide whether to launch.</span></p>
         </div>
-        <a class="button" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry">hugo.uno.claw@gmail.com</a>
+        <form class="contact-form" id="contactForm">
+          <input name="name" autocomplete="name" required aria-label="Name" placeholder="稱呼 / Name">
+          <input name="contact" autocomplete="email" required aria-label="Email or LINE" placeholder="Email / LINE">
+          <textarea name="need" required aria-label="Project need" placeholder="一句話想做什麼 / What do you want to build?"></textarea>
+          <button class="button" type="submit"><span lang="zh">整理詢問訊息</span><span lang="en">Prepare inquiry</span></button>
+          <a class="button ghost" id="emailLink" href="mailto:hugo.uno.claw@gmail.com?subject=Lumo%20project%20inquiry">hugo.uno.claw@gmail.com</a>
+          <div class="form-status" id="formStatus" aria-live="polite"></div>
+        </form>
       </div>
     </section>
   </main>
@@ -610,6 +744,9 @@
     const root = document.documentElement;
     const langToggle = document.querySelector("#langToggle");
     const langKey = "lumo-site-index2-lang";
+    const contactForm = document.querySelector("#contactForm");
+    const emailLink = document.querySelector("#emailLink");
+    const formStatus = document.querySelector("#formStatus");
 
     function setLang(lang) {
       body.dataset.lang = lang;
@@ -620,6 +757,23 @@
 
     langToggle.addEventListener("click", () => setLang(body.dataset.lang === "zh" ? "en" : "zh"));
     setLang(localStorage.getItem(langKey) || "zh");
+
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const form = new FormData(contactForm);
+      const message = [
+        `Name: ${form.get("name")}`,
+        `Contact: ${form.get("contact")}`,
+        `Need: ${form.get("need")}`
+      ].join("\n");
+      emailLink.href = `mailto:hugo.uno.claw@gmail.com?subject=${encodeURIComponent("Lumo project inquiry")}&body=${encodeURIComponent(message)}`;
+      try {
+        await navigator.clipboard.writeText(message);
+        formStatus.textContent = body.dataset.lang === "zh" ? "已整理並複製訊息，可以直接寄出。" : "Inquiry copied. You can send it now.";
+      } catch {
+        formStatus.textContent = body.dataset.lang === "zh" ? "已整理訊息，可以點下方 email 寄出。" : "Inquiry prepared. Use the email button to send it.";
+      }
+    });
   </script>
 </body>
 </html>
