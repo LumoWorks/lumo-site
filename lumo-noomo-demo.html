@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumo Noomo-style demo</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#080907;
+      --ink:#f5f1ea;
+      --muted:#9f9890;
+      --line:rgba(245,241,234,.13);
+      --glass:rgba(245,241,234,.08);
+      --green:#16e0ae;
+      --lime:#c9ff56;
+      --orange:#ff8b2e;
+      --blue:#7695ff;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      min-height:100vh;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(22,224,174,.17), transparent 30rem),
+        radial-gradient(circle at 24% 70%, rgba(255,139,46,.12), transparent 28rem),
+        var(--bg);
+      color:var(--ink);
+      font-family:"PingFang TC", "Noto Sans TC", "Microsoft JhengHei UI", system-ui, sans-serif;
+    }
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:72px 72px;
+      mask-image:radial-gradient(circle at 50% 30%, #000, transparent 72%);
+    }
+    a { color:inherit; text-decoration:none; }
+    .wrap { width:min(1240px, calc(100% - 36px)); margin:auto; }
+    nav {
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .logo {
+      color:var(--ink);
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.05em;
+    }
+    .nav-links { display:flex; gap:18px; align-items:center; }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:9px 14px;
+      background:rgba(255,255,255,.05);
+      color:var(--ink);
+      font-weight:800;
+    }
+    .hero {
+      min-height:calc(100vh - 76px);
+      display:grid;
+      grid-template-columns:.78fr 1.22fr;
+      gap:46px;
+      align-items:center;
+      padding:48px 0 80px;
+    }
+    .eyebrow {
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    h1 {
+      max-width:620px;
+      margin:20px 0 0;
+      font-size:clamp(44px, 6.8vw, 92px);
+      line-height:1.05;
+      letter-spacing:0;
+      text-wrap:balance;
+    }
+    .lead {
+      max-width:520px;
+      margin:24px 0 0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.75;
+    }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:30px; }
+    .button {
+      border:0;
+      border-radius:999px;
+      padding:13px 18px;
+      background:var(--ink);
+      color:#080907;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .button.dark { border:1px solid var(--line); background:rgba(255,255,255,.06); color:var(--ink); }
+    .stage {
+      min-height:680px;
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:36px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at calc(var(--mx, 50) * 1%) calc(var(--my, 50) * 1%), rgba(201,255,86,.22), transparent 16rem),
+        linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02) 40%, rgba(22,224,174,.08));
+      box-shadow:0 38px 120px rgba(0,0,0,.48);
+      transform-style:preserve-3d;
+    }
+    .stage::after {
+      content:"";
+      position:absolute;
+      inset:-30%;
+      background:conic-gradient(from 140deg, transparent, rgba(22,224,174,.22), transparent, rgba(118,149,255,.2), transparent);
+      filter:blur(40px);
+      opacity:.55;
+      animation:spin 18s linear infinite;
+    }
+    .orb {
+      position:absolute;
+      width:330px;
+      aspect-ratio:1;
+      border-radius:40% 60% 55% 45%;
+      background:linear-gradient(145deg, rgba(201,255,86,.78), rgba(22,224,174,.35), rgba(118,149,255,.25));
+      filter:blur(.2px);
+      left:50%;
+      top:44%;
+      transform:translate(-50%, -50%) rotateX(54deg) rotateZ(-18deg);
+      box-shadow:inset -28px -34px 80px rgba(0,0,0,.45), 0 28px 90px rgba(22,224,174,.22);
+      animation:morph 9s ease-in-out infinite;
+      z-index:1;
+    }
+    .card {
+      position:absolute;
+      z-index:2;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:24px;
+      background:rgba(11,12,10,.72);
+      backdrop-filter:blur(18px);
+      box-shadow:0 24px 80px rgba(0,0,0,.42);
+      transition:transform .25s ease, border-color .25s ease;
+    }
+    .stage:hover .card { border-color:rgba(255,255,255,.3); }
+    .preview {
+      width:360px;
+      left:8%;
+      top:12%;
+      padding:18px;
+      transform:translate3d(calc((var(--mx, 50) - 50) * -.25px), calc((var(--my, 50) - 50) * -.18px), 0) rotate(-3deg);
+      animation:floatA 7s ease-in-out infinite;
+    }
+    .signal {
+      width:250px;
+      right:8%;
+      top:18%;
+      padding:20px;
+      color:#111;
+      background:rgba(245,241,234,.9);
+      transform:translate3d(calc((var(--mx, 50) - 50) * .18px), calc((var(--my, 50) - 50) * -.16px), 0) rotate(5deg);
+      animation:floatB 8s ease-in-out infinite;
+    }
+    .mobile {
+      width:230px;
+      right:14%;
+      bottom:14%;
+      padding:16px;
+      transform:translate3d(calc((var(--mx, 50) - 50) * -.16px), calc((var(--my, 50) - 50) * .2px), 0) rotate(-2deg);
+      animation:floatC 7.4s ease-in-out infinite;
+    }
+    .process {
+      width:320px;
+      left:13%;
+      bottom:12%;
+      padding:20px;
+      transform:translate3d(calc((var(--mx, 50) - 50) * .16px), calc((var(--my, 50) - 50) * .16px), 0) rotate(3deg);
+    }
+    .bar { display:flex; gap:7px; padding-bottom:16px; }
+    .bar i { width:8px; height:8px; border-radius:50%; background:var(--muted); }
+    .line { height:10px; border-radius:999px; background:rgba(255,255,255,.2); margin-top:10px; }
+    .line.big { width:76%; height:26px; background:var(--ink); }
+    .line.green { width:54%; background:var(--green); }
+    .shot-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+    .shot-grid div { height:76px; border-radius:16px; background:rgba(255,255,255,.08); border:1px solid var(--line); }
+    .label {
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+    }
+    .card strong { display:block; margin-top:12px; font-size:24px; line-height:1.18; text-wrap:balance; }
+    .signal strong { font-size:28px; }
+    .signal .label { color:#6d675f; }
+    .signal p, .card p { margin:12px 0 0; color:var(--muted); line-height:1.55; }
+    .signal p { color:#5e574f; }
+    .steps { display:grid; gap:10px; margin-top:16px; }
+    .step { display:grid; grid-template-columns:34px 1fr; gap:10px; align-items:center; color:var(--muted); }
+    .step span { color:var(--lime); font-weight:900; }
+    .strip {
+      margin:0 auto 80px;
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      border:1px solid var(--line);
+      border-radius:24px;
+      overflow:hidden;
+      color:var(--muted);
+      background:rgba(255,255,255,.035);
+    }
+    .strip div { min-height:116px; padding:22px; border-left:1px solid var(--line); }
+    .strip div:first-child { border-left:0; }
+    .strip strong { display:block; margin-top:16px; color:var(--ink); font-size:20px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes morph {
+      0%, 100% { border-radius:40% 60% 55% 45%; transform:translate(-50%, -50%) rotateX(54deg) rotateZ(-18deg) scale(1); }
+      50% { border-radius:58% 42% 38% 62%; transform:translate(-50%, -52%) rotateX(58deg) rotateZ(12deg) scale(1.08); }
+    }
+    @keyframes floatA { 50% { margin-top:-18px; } }
+    @keyframes floatB { 50% { margin-top:14px; } }
+    @keyframes floatC { 50% { margin-bottom:16px; } }
+    @media (max-width:920px) {
+      .nav-links a:not(.pill) { display:none; }
+      .hero { grid-template-columns:1fr; padding-top:28px; }
+      .stage { min-height:720px; }
+      .preview { left:6%; top:8%; width:min(360px, 78vw); }
+      .signal { right:5%; top:37%; width:min(260px, 68vw); }
+      .process { left:5%; bottom:8%; width:min(330px, 76vw); }
+      .mobile { right:6%; bottom:28%; width:min(230px, 56vw); }
+      .strip { grid-template-columns:1fr 1fr; }
+      .strip div:nth-child(odd) { border-left:0; }
+      .strip div:nth-child(n+3) { border-top:1px solid var(--line); }
+    }
+    @media (max-width:560px) {
+      .wrap { width:min(100% - 24px, 1240px); }
+      h1 { font-size:clamp(38px, 11vw, 48px); }
+      .lead { font-size:16px; }
+      .stage { min-height:790px; border-radius:28px; }
+      .orb { width:240px; top:40%; }
+      .preview, .signal, .mobile, .process { transform:none; animation:none; }
+      .preview { width:calc(100% - 32px); left:16px; }
+      .signal { top:34%; width:calc(100% - 60px); }
+      .mobile { bottom:27%; width:58%; }
+      .process { width:calc(100% - 32px); left:16px; bottom:18px; }
+      .strip { grid-template-columns:1fr; }
+      .strip div { border-left:0; border-top:1px solid var(--line); }
+      .strip div:first-child { border-top:0; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="wrap">
+    <a class="logo" href="#">lumo</a>
+    <div class="nav-links">
+      <a href="#stage">Preview</a>
+      <a href="#flow">Flow</a>
+      <a class="pill" href="mailto:hugo.uno.claw@gmail.com">Start small</a>
+    </div>
+  </nav>
+
+  <header class="wrap hero">
+    <div>
+      <div class="eyebrow">Noomo-inspired interaction demo</div>
+      <h1>把官網做成一個能被感覺到的預覽。</h1>
+      <p class="lead">不是再放兩張假截圖。Lumo 的網站舞台要像作品本身：有層次、有動態、有可信訊號，讓客戶在第一眼就知道這不是模板。</p>
+      <div class="actions">
+        <a class="button" href="#stage">看互動舞台</a>
+        <a class="button dark" href="#flow">看交付節奏</a>
+      </div>
+    </div>
+
+    <section class="stage" id="stage" aria-label="Interactive preview stage">
+      <div class="orb" aria-hidden="true"></div>
+
+      <article class="card preview">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="line big"></div>
+        <div class="line"></div>
+        <div class="line" style="width:62%"></div>
+        <div class="line green"></div>
+        <div class="shot-grid"><div></div><div></div></div>
+      </article>
+
+      <article class="card signal">
+        <div class="label">Signal / 02</div>
+        <strong>私人預覽，先讓人有感。</strong>
+        <p>先看到方向，再決定公開。少一點承諾，多一點判斷。</p>
+      </article>
+
+      <article class="card mobile">
+        <div class="label">Mobile first</div>
+        <strong>手機第一眼要成立。</strong>
+        <p>商家客戶多半先在手機看。</p>
+      </article>
+
+      <article class="card process">
+        <div class="label">Lumo method</div>
+        <strong>從畫面直接進入成交訊號。</strong>
+        <div class="steps">
+          <div class="step"><span>01</span><b>可信首頁</b></div>
+          <div class="step"><span>02</span><b>私人預覽</b></div>
+          <div class="step"><span>03</span><b>回饋後上線</b></div>
+        </div>
+      </article>
+    </section>
+  </header>
+
+  <section class="wrap strip" id="flow">
+    <div><span class="label">Frame</span><strong>定義 offer</strong></div>
+    <div><span class="label">Build</span><strong>做可看的版本</strong></div>
+    <div><span class="label">Signal</span><strong>拿回覆與信任</strong></div>
+    <div><span class="label">Ship</span><strong>同意後公開</strong></div>
+  </section>
+
+  <script>
+    const stage = document.querySelector(".stage");
+    stage.addEventListener("pointermove", (event) => {
+      const rect = stage.getBoundingClientRect();
+      stage.style.setProperty("--mx", ((event.clientX - rect.left) / rect.width * 100).toFixed(2));
+      stage.style.setProperty("--my", ((event.clientY - rect.top) / rect.height * 100).toFixed(2));
+    });
+  </script>
+</body>
+</html>
