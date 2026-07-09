@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Lumo Status</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08090b;
+      --panel: #111318;
+      --panel-2: #171a21;
+      --line: #2b303a;
+      --text: #f7f3ea;
+      --muted: #a8adb7;
+      --soft: #d8c6a1;
+      --ok: #6ee7a8;
+      --work: #7dd3fc;
+      --warn: #f7c76a;
+      --bad: #ff8f8f;
+      --hold: #a78bfa;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 16% 0%, rgba(125, 211, 252, .16), transparent 28rem),
+        radial-gradient(circle at 88% 12%, rgba(167, 139, 250, .14), transparent 24rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei UI", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    main { width: min(1180px, calc(100% - 28px)); min-width: 0; margin: auto; padding: 26px 0 56px; }
+    header { padding: 18px 0 24px; }
+    h1, h2, h3, p { margin: 0; overflow-wrap: anywhere; }
+    h1 { max-width: 860px; font-size: clamp(44px, 8vw, 92px); line-height: 1.04; letter-spacing: 0; font-weight: 760; text-wrap: balance; }
+    h2 { margin: 34px 0 14px; font-size: clamp(26px, 3vw, 38px); line-height: 1.18; }
+    h3 { font-size: 20px; line-height: 1.25; }
+    p, .muted { color: var(--muted); }
+    a { color: inherit; text-decoration: none; }
+
+    .topline { color: var(--soft); font-size: 14px; font-weight: 800; text-transform: uppercase; }
+    .stamp { margin-top: 14px; color: var(--muted); font-size: 14px; }
+    .hero-copy { max-width: 720px; margin-top: 16px; font-size: 18px; color: #d9dee8; }
+
+    .grid { display: grid; min-width: 0; gap: 14px; }
+    .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 22px; }
+    .projects { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+    .card {
+      display: block;
+      min-width: 0;
+      min-height: 190px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+      box-shadow: 0 20px 80px rgba(0,0,0,.22);
+    }
+    .card:hover { border-color: rgba(216,198,161,.55); transform: translateY(-1px); }
+    .card.sugarm { border-color: rgba(125, 211, 252, .45); background: linear-gradient(180deg, rgba(125,211,252,.12), rgba(255,255,255,.025)); }
+    .card .body { margin-top: 12px; color: var(--muted); font-size: 15px; }
+    .metric { margin-top: 18px; font-size: 34px; font-weight: 780; line-height: 1; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 820;
+      color: var(--soft);
+    }
+    .ok { color: var(--ok); }
+    .work { color: var(--work); }
+    .warn { color: var(--warn); }
+    .bad { color: var(--bad); }
+    .hold { color: var(--hold); }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 18px;
+      min-width: 0;
+    }
+
+    .panel {
+      min-width: 0;
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(17,19,24,.86);
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.025);
+    }
+    .panel-head p { margin-top: 6px; }
+
+    .progress {
+      height: 10px;
+      margin-top: 14px;
+      border-radius: 999px;
+      background: #242934;
+      overflow: hidden;
+    }
+    .progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--ok), var(--work)); }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    th { color: var(--soft); font-size: 13px; text-transform: uppercase; letter-spacing: 0; background: rgba(255,255,255,.025); }
+    td { color: #e9edf5; font-size: 15px; }
+    td small { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    tr:last-child td { border-bottom: 0; }
+
+    .status-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      font-weight: 760;
+    }
+    .status-dot:before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      background: rgba(255,255,255,.04);
+      font-weight: 760;
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid rgba(247,199,106,.28);
+      border-radius: 14px;
+      color: #f8e3ad;
+      background: rgba(247,199,106,.08);
+    }
+
+    footer { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 840px) {
+      main { width: calc(100vw - 22px); max-width: calc(100vw - 22px); overflow-x: hidden; padding-top: 18px; }
+      h1 { max-width: 330px; font-size: 38px; line-height: 1.16; word-break: keep-all; }
+      .hero-copy, .card .body, td { font-size: 16px; white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
+      .cards, .summary { grid-template-columns: 1fr; }
+      .cards, .projects, .summary, .card { width: 100%; max-width: calc(100vw - 22px); }
+      .card { min-height: auto; overflow: hidden; }
+      .panel { overflow-x: auto; }
+      table { min-width: 760px; }
+      .panel-head { display: block; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="topline">Lumo Boss Status</div>
+    <h1>一眼看懂，下一步誰做。</h1>
+    <p class="hero-copy">這頁是 public-safe / noindex 狀態看板。SugarM 卡片可點進明細，Agent 依照下方清單接續，不再等 Boss 一句一動。</p>
+    <p class="stamp">Updated: 2026-07-10 02:04 Taipei</p>
+  </header>
+
+  <section class="grid cards" aria-label="project summary">
+    <a class="card sugarm" href="#sugarm">
+      <span class="pill work">點我看細節</span>
+      <h3>SugarM</h3>
+      <p class="body">線上可讀、mock/test-mode 付款已驗；正式收費與 public launch 尚未過 gate。</p>
+      <div class="metric">67%</div>
+      <div class="progress"><span style="width:67%"></span></div>
+    </a>
+    <article class="card">
+      <span class="pill bad">Boss Gate</span>
+      <h3>Live Payment</h3>
+      <p class="body">Stripe/PayPal eligibility、live keys、webhook、真卡、小額驗證都尚未核準。</p>
+      <div class="metric">Hold</div>
+    </article>
+    <article class="card">
+      <span class="pill warn">Prod Gate</span>
+      <h3>Trust & Safety</h3>
+      <p class="body">18+、禁止行為、檢舉/封鎖、隱私/刪除、support/refund 需補齊。</p>
+      <div class="metric">P0</div>
+    </article>
+    <article class="card">
+      <span class="pill ok">Done</span>
+      <h3>UIUX Hardening</h3>
+      <p class="body">首頁信任宣稱、付款 disabled 文案、成功頁 pending 狀態、繁中文案已做第一輪。</p>
+      <div class="metric">LUM-396</div>
+    </article>
+  </section>
+
+  <section id="sugarm">
+    <h2>SugarM 項目細節清單</h2>
+    <div class="summary">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>目前結論</h3>
+            <p>可做內部 prod-like / read-only acceptance；不可正式收費營運。</p>
+          </div>
+          <span class="pill warn">Not paid prod</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>區塊</th>
+              <th>狀態</th>
+              <th>證據</th>
+              <th>下一步</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>網站與後端</td>
+              <td><span class="status-dot ok">好了</span></td>
+              <td>sugarm.me 可連；backend info 已驗。</td>
+              <td>持續 smoke，不動 live payment。</td>
+              <td>PE</td>
+            </tr>
+            <tr>
+              <td>Mock/test-mode 付款主流程</td>
+              <td><span class="status-dot ok">好了</span></td>
+              <td>LUM-158 / LUM-261 到達 <code>/subscription/success</code>。</td>
+              <td>保留為回歸驗證。</td>
+              <td>PE</td>
+            </tr>
+            <tr>
+              <td>付款路由 guard</td>
+              <td><span class="status-dot ok">好了</span></td>
+              <td>LUM-263 static smoke 覆蓋 subscription/payment/success route。</td>
+              <td>若改 payment UI 必跑 smoke。</td>
+              <td>PE</td>
+            </tr>
+            <tr>
+              <td>Live-readiness no-payment</td>
+              <td><span class="status-dot ok">好了</span></td>
+              <td>LUM-293 checks passed 9/9；live payment 保持 disabled。</td>
+              <td>進下一層 payment prep packet。</td>
+              <td>PE</td>
+            </tr>
+            <tr>
+              <td>Pre-prod UIUX hardening</td>
+              <td><span class="status-dot ok">第一輪好了</span></td>
+              <td>LUM-396 移除誇大信任宣稱、修 payment disabled / success pending / i18n。</td>
+              <td>部署前跑 screenshot QA。</td>
+              <td>PE / UIUX</td>
+            </tr>
+            <tr>
+              <td>正式金流</td>
+              <td><span class="status-dot bad">沒好</span></td>
+              <td>Live keys、provider eligibility、webhook、真卡驗證都未核準。</td>
+              <td>先做 provider / policy review；Boss 核準後才可設定。</td>
+              <td>Boss / CEO / PE</td>
+            </tr>
+            <tr>
+              <td>18+ / 年齡 gate</td>
+              <td><span class="status-dot bad">沒好</span></td>
+              <td>LUM-296: profile age 有 min=18，但 registration/server gate 不足。</td>
+              <td>建立 PE P0：registration/server-side 18+ gate。</td>
+              <td>PE + CISO</td>
+            </tr>
+            <tr>
+              <td>安全與禁止行為文案</td>
+              <td><span class="status-dot bad">沒好</span></td>
+              <td>LUM-296: 缺 consent、scam、off-platform payment、escort/transactional sex 禁止等明確文案。</td>
+              <td>建立 PM/CISO P0 policy copy ticket。</td>
+              <td>PM + CISO</td>
+            </tr>
+            <tr>
+              <td>Report / block / moderation</td>
+              <td><span class="status-dot warn">部分好了</span></td>
+              <td>UI/API 有基礎，但 message report / admin queue / audit 仍需 end-to-end smoke。</td>
+              <td>建立 PE P1 smoke ticket。</td>
+              <td>PE / QA</td>
+            </tr>
+            <tr>
+              <td>Privacy / delete / retention</td>
+              <td><span class="status-dot warn">部分好了</span></td>
+              <td>terms/privacy 頁存在；缺 retention/export/delete 實作與 runbook 證據。</td>
+              <td>建立 PE/PM P1 privacy workflow ticket。</td>
+              <td>PE + PM</td>
+            </tr>
+            <tr>
+              <td>Refund / support ops</td>
+              <td><span class="status-dot warn">部分好了</span></td>
+              <td>LUM-293 指出 refund UI/API amount mismatch；LUM-295 有修補證據。</td>
+              <td>正式金流前做 live-disabled refund ops QA。</td>
+              <td>PE + CFO/Ops</td>
+            </tr>
+            <tr>
+              <td>PM Relay backlog</td>
+              <td><span class="status-dot bad">卡住</span></td>
+              <td>LUM-301 / LUM-403 卡 PE-84-06+ backlog decision。</td>
+              <td>改走本表 Prod readiness queue，不走舊曝光權重。</td>
+              <td>CEO / PM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Agent 下一步</h3>
+            <p>照順序拿，不要跳過 P0。</p>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>順序</th>
+              <th>要開的單</th>
+              <th>Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>P0</td>
+              <td>enforce 18+ registration / server age gate</td>
+              <td>PE</td>
+            </tr>
+            <tr>
+              <td>P0</td>
+              <td>safety / prohibited-use / support policy copy</td>
+              <td>PM + CISO</td>
+            </tr>
+            <tr>
+              <td>P0</td>
+              <td>payment provider eligibility + live payment gate packet</td>
+              <td>CISO + CFO/Ops</td>
+            </tr>
+            <tr>
+              <td>P1</td>
+              <td>report / block / moderation / audit smoke</td>
+              <td>PE + QA</td>
+            </tr>
+            <tr>
+              <td>P1</td>
+              <td>privacy export/delete/retention workflow</td>
+              <td>PE + PM</td>
+            </tr>
+            <tr>
+              <td>P1</td>
+              <td>payment ops / refund support readiness</td>
+              <td>PE + CFO/Ops</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">Stop rule: live keys、真卡、payment link、invoice、public launch、正式價格或合約，都需要 Boss approval。</div>
+      </aside>
+    </div>
+  </section>
+
+  <section>
+    <h2>其他專案</h2>
+    <div class="grid projects">
+      <article class="card">
+        <span class="pill bad">Boss Gate</span>
+        <h3>Website Studio</h3>
+        <p class="body">最快收入主線仍卡外部寄送 / sender route / Boss action。</p>
+      </article>
+      <article class="card">
+        <span class="pill work">Operating</span>
+        <h3>Lumo Company OS</h3>
+        <p class="body">PAP / Paperclip 持續跑；需要把 PM relay 從 blocked loop 改成 dashboard-driven queue。</p>
+      </article>
+      <article class="card">
+        <span class="pill hold">Later</span>
+        <h3>Open Design</h3>
+        <p class="body">暫不導入。等 payment/trust/safety gates 清掉後，再用於 design system / prototype / deck。</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    Source evidence: LUM-158, LUM-261, LUM-263, LUM-293, LUM-294, LUM-296, LUM-333, LUM-396. Public-safe summary only.
+  </footer>
+</main>
+</body>
+</html>
